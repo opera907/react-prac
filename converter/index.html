@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>converter</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.16.2/babel.min.js"></script>
+    <script type="text/babel">
+        const TimeConverter = () => {
+            const [value, setValue] = React.useState()
+            const [invert, setInvert] = React.useState(false)
+            const onChange = (e) => {
+            setValue(e.target.value)
+            } 
+
+            const setReset = () => {setValue(0)}
+            const oninvert = () => {
+                setReset()
+                setInvert( current => !current)
+            }
+            
+            const Btn = ({txt, setEvt}) => {
+                console.log(txt, setEvt)
+                return(
+                    <button 
+                    style={{
+                        background : "tomato",
+                        color: "white",
+                        padding: "10px 15px",
+                        margin: "5px",
+                        border: "none",
+                        borderRadius: "5px"
+                    }} 
+                    onClick={setEvt}>
+                        {txt}
+                    </button>
+                )
+            }
+            return(
+                <main>
+                        <h3>Time Converter</h3>
+                    <div>
+                        <label htmlFor="min">Minute</label>
+                        <input disabled={invert} value={invert ? value * 60 : value}  onChange={onChange} id="min" type="number" placeholder="Min"></input>
+                    </div>
+                    <div>
+                        <label htmlFor="hour">Hour</label>
+                        <input disabled={!invert} value={invert ? value : Math.round(value / 60)} onChange={onChange} id="hour" type="number" placeholder="Hour"></input>
+                    </div>
+                    <Btn txt="reset" setEvt={setReset}/>
+                    <button onClick={oninvert}>{invert ? "invert to min" : "invert to hour"}</button>
+                    <p>{invert ? 'invert : true' : 'invert : false'}</p>
+                </main>
+                ) 
+        }
+
+        const KmConverter = () => {
+            const [value, setKmVal] = React.useState()
+            const [covert, setSwitch] = React.useState(false)
+            const chkValue = (e) => {
+                setKmVal(e.target.value)
+            }
+            const chkSwitch = () => {
+                chkReset()
+                setSwitch(current => !current)
+            }
+            const chkReset = () => {
+                setKmVal(current => current = 0)
+            }
+
+            return(
+                <main>
+                    <h3>km Converter</h3>
+                    <div>
+                        <div>
+                            <label htmlFor="km">km</label>
+                            <input id="km" disabled={covert} value={covert ? value * 1.6 : value } onChange={chkValue} type="number" placeholder="km"></input>
+                        </div>
+                        <div>
+                            <label htmlFor="mile">mile</label>
+                            <input id="mile" disabled={!covert} value={covert ? value : value * 0.621371 } onChange={chkValue} type="number" placeholder="miles"></input>
+                        </div>
+                    </div>
+                    <div>
+                        <button onClick={chkReset}>reset</button>
+                        <button onClick={chkSwitch}>{covert ? 'convert to km' : 'convert to mile'}</button>
+                        <p>{covert ? 'invert : true' : 'invert : false'}</p>
+                    </div>
+                </main>
+            )
+        }
+
+
+        function Container() {
+            const [name, sub] = ['Converter whatever it is', 'working!']
+            let [index, setIndex] = React.useState("0")
+            const selectOpt = (e) => {
+                setIndex(e.target.value)
+            }
+
+            return(
+                <header>
+                    <h1>{name}</h1>
+                    <div>
+                        <select value={index} onChange={selectOpt}>
+                            <option value="0">selcet unit</option>
+                            <option value="1">time coverter</option>
+                            <option value="2">km coverter</option>
+                        </select>
+                    </div>
+
+                    {index === "0" ? 'plz select someting' : null}
+                    {index === "1" ? <TimeConverter /> : null}
+                    {index === "2" ? <KmConverter /> : null}
+                </header>  
+            )
+        }
+        ReactDOM.render(<Container />, document.getElementById("root"))
+    </script>
+</body>
+
+</html>
